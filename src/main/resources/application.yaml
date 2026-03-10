@@ -14,3 +14,10 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  level:
+    root: warn
+    com.example.rednote: debug
+  pattern:
+    console: "-----------------%n%d{HH:mm:ss} | %highlight(%-4level) | %-15.15thread | %logger |%n%msg%n-----------------%n"
