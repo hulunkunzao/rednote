@@ -1,15 +1,11 @@
 <template>
-  <el-menu
-    default-active="$route.path"
-    router
-    class="el-menu-vertical-demo menu-container"
-  >
+  <el-menu default-active="$route.path" router class="el-menu-vertical-demo menu-container">
     <div class="menu-top">
       <el-menu-item index="/explore">
         <el-icon><HomeFilled /></el-icon>
         <span>发现</span>
       </el-menu-item>
-      <el-menu-item index="3" >
+      <el-menu-item index="3">
         <el-icon><CirclePlus /></el-icon>
         <span>发布</span>
       </el-menu-item>
@@ -24,8 +20,10 @@
     </div>
     <div class="menu-bottom">
       <el-menu-item>
-        <el-dropdown trigger = "click" placement="top-start">
-          <span><el-icon><Setting /></el-icon> 设置 </span>
+        <el-dropdown trigger="click" placement="top-start">
+          <span
+            ><el-icon><Setting /></el-icon> 设置
+          </span>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item>The Action 1st</el-dropdown-item>
@@ -39,10 +37,7 @@
   </el-menu>
 </template>
 
-<script lang="ts" setup>
-
-
-</script>
+<script setup></script>
 
 <style scoped>
 .menu-container {

@@ -23,7 +23,6 @@
         </div>
       </div>
     </div>
-    
     <div class="profile-content">
       <el-tabs v-model="activeTab">
         <el-tab-pane label="笔记" name="posts">
@@ -65,28 +64,31 @@ const user = ref({
   stats: {
     posts: 12,
     followers: 56,
-    following: 34
+    following: 34,
   },
   posts: [
     {
       id: 1,
       title: '我的第一篇笔记',
       excerpt: '这是笔记的摘要内容...',
-      cover: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=Vue%203%20note%20cover&size=800x600'
+      cover:
+        'https://neeko-copilot.bytedance.net/api/text2image?prompt=Vue%203%20note%20cover&size=800x600',
     },
     {
       id: 2,
       title: '学习 Vue 3 的心得',
       excerpt: 'Vue 3 真的很棒...',
-      cover: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=Vue%203%20learning&size=800x600'
+      cover:
+        'https://neeko-copilot.bytedance.net/api/text2image?prompt=Vue%203%20learning&size=800x600',
     },
     {
       id: 3,
       title: '前端开发最佳实践',
       excerpt: '分享一些前端开发的最佳实践...',
-      cover: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=Frontend%20best%20practices&size=800x600'
-    }
-  ]
+      cover:
+        'https://neeko-copilot.bytedance.net/api/text2image?prompt=Frontend%20best%20practices&size=800x600',
+    },
+  ],
 })
 
 const activeTab = ref('posts')
@@ -200,16 +202,15 @@ const activeTab = ref('posts')
     flex-direction: column;
     text-align: center;
   }
-  
   .profile-avatar {
     margin-right: 0;
     margin-bottom: 20px;
   }
-  
+
   .profile-stats {
     justify-content: center;
   }
-  
+
   .posts-grid {
     grid-template-columns: 1fr;
   }

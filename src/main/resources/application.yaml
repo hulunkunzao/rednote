@@ -14,3 +14,29 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  level:
+    root: warn
+    com.example.rednote: debug
+  pattern:
+    console: "-----------------%n%d{HH:mm:ss} | %highlight(%-4level) | %-15.15thread | %logger |%n%msg%n-----------------%n"
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: "仿小红书项目接口文档"
+      paths-to-match: "/**"
+      packages-to-scan: com.example.rednote.controller
+
+knife4j:
+  enable: true
+  production: false
+  setting:
+    language: zh_cn
+    enable-version: true
+    enable-swagger-models: true
+    swagger-model-name: 实体类列表

@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import AppMenu from './AppMenu.vue';
+import AppMenu from './AppMenu.vue'
 </script>
 
 <style scoped>
@@ -23,7 +23,7 @@ import AppMenu from './AppMenu.vue';
   height: 100vh;
   width: 100%;
 }
-.common-layout:deep(.el-container){
+.common-layout:deep(.el-container) {
   height: 100%;
 }
 </style>
