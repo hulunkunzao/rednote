@@ -1,11 +1,12 @@
 package com.example.rednote.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.rednote.model.dto.PasswordUpdateDTO;
+import com.example.rednote.model.dto.UserUpdateDTO;
+import com.example.rednote.model.vo.PostVO;
+import com.example.rednote.model.vo.UserDetailsVO;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.rednote.common.response.Result;
 import com.example.rednote.model.dto.LoginDTO;
@@ -47,5 +48,39 @@ public class UserController {
     @Operation(summary = "用户登录", description = "登录用户账号")
     public Result<String> login(@RequestBody LoginDTO loginDTO) {
         return Result.success(userService.login(loginDTO));
+    }
+
+    @GetMapping("/current")
+    @Operation(summary = "获取当前登录用户详情")
+    public Result<UserDetailsVO> getCurrentUser() {
+        return Result.success(userService.getCurrentUserDetails());
+    }
+
+    @PutMapping("/info")
+    @Operation(summary = "更新用户信息")
+    public Result<Boolean> updateUserInfo(@RequestBody UserUpdateDTO updateDTO) {
+        return Result.success(userService.updateUserInfo(updateDTO));
+    }
+
+    @PutMapping("/password")
+    @Operation(summary = "修改密码")
+    public Result<Boolean> updatePassword(@Valid @RequestBody PasswordUpdateDTO passwordDTO) {
+        return Result.success(userService.updatePassword(passwordDTO));
+    }
+
+    @PostMapping("/follow/{followUserId}")
+    @Operation(summary = "关注/取消关注用户")
+    public Result<Boolean> followUser(@PathVariable Integer followUserId) {
+        boolean isFollow = userService.followUser(followUserId);
+        return Result.success(isFollow);
+    }
+
+    @GetMapping("/{userId}/posts")
+    @Operation(summary = "查询用户发布的帖子列表")
+    public Result<Page<PostVO>> listUserPosts(
+            @PathVariable Integer userId,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+        return Result.success(userService.listUserPosts(userId, page, size));
     }
 }
