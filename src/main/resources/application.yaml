@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/rednote
     username: root
-    password: root
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 mybatis:
@@ -45,7 +45,6 @@ knife4j:
 jwt:
   secret: your-secure-32-character-secret-key-here
   expiration: 86400000 # 24 小时
-
 minio:
   endpoint: ${MINIO_ENDPOINT}
   access-key: ${MINIO_ACCESS_KEY}

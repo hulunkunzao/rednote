@@ -9,9 +9,10 @@
         <el-tab-pane label="使用工具" name="sixth">Task</el-tab-pane>
     </el-tabs>
     <el-scrollbar ref="scrollbarRef" height="400px">
-      <p v-for="item in num" :key="item" class="scrollbar-demo-item">
-        {{ item }}
-      </p>
+      <el-card style="max-width: 480px" height = "500px" v-for="item in num" :key="item" class="scrollbar-demo-item">
+          <p >{{ item }}</p>
+          <template #footer>Footer content</template>
+      </el-card>
     </el-scrollbar>
   </div>
 </template>
@@ -65,7 +66,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 50px;
+  height: 200px;
   margin: 10px;
   text-align: center;
   border-radius: 4px;

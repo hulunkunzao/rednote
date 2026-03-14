@@ -21,6 +21,29 @@ const router = createRouter({
       name: 'profile',
       component: () => import('@/views/ProfileView.vue'),
     },
+    {
+      path: '/publish',
+      name: 'publish',
+      component: () => import('@/views/PublishView.vue'),
+      children:[
+        {
+          path:'/video',
+          name:'publish-video',
+          component: () => import('@/components/UploadVideo.vue'),
+        },
+        {
+          path:'/image',
+          name:'publish-image',
+          component: () => import('@/components/UploadImage.vue'),
+        },
+        {
+          path:'/article',
+          name:'publish-article',
+          component: () => import('@/components/UploadArticle.vue'),
+        }
+      ]
+    },
+    
   ],
 })
 
