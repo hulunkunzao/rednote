@@ -2,11 +2,11 @@ package com.example.rednote.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.rednote.common.utils.ThreadLocalUtils;
 import com.example.rednote.mapper.CommentMapper;
 import com.example.rednote.mapper.PostMapper;
 import com.example.rednote.model.dto.CommentDTO;
+import com.example.rednote.model.exception.PostQueryFailedExceptioin;
 import com.example.rednote.model.po.CommentPO;
 import com.example.rednote.model.vo.CommentVO;
 import com.example.rednote.service.CommentService;
@@ -32,5 +32,16 @@ public class CommentServiceImpl  implements CommentService {
         }
         List<CommentVO> commentVOS = BeanUtil.copyToList(commentPOS, CommentVO.class);
         return commentVOS;
+    }
+
+    @Override
+    public void insert(CommentDTO commentDTO) {
+        Integer userId = ThreadLocalUtils.get("userId");
+        if (postMapper.selectById(commentDTO.getPostId()) == null) {
+            throw new PostQueryFailedExceptioin("帖子不存在");
+        }
+        CommentPO commentPO = BeanUtil.copyProperties(commentDTO, CommentPO.class);
+        commentPO.setUserId(userId);
+        commentMapper.insert(commentPO);
     }
 }

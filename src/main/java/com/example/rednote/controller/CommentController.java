@@ -25,4 +25,11 @@ public class CommentController {
         List<CommentVO> commentVOS = commentService.listByPostId(postId);
         return Result.success(commentVOS);
     }
+
+    @Operation(summary = "添加评论", description = "用户对帖子进行评论")
+    @PostMapping("/insert")
+    public Result addComment(@RequestBody CommentDTO commentDTO){
+        commentService.insert(commentDTO);
+        return Result.success();
+    }
 }
