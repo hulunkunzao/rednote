@@ -143,7 +143,6 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("不能关注自己");
         }
 
-        // 检查是否已关注
         LambdaQueryWrapper<FollowPO> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(FollowPO::getFollowerId, currentUserId)
                 .eq(FollowPO::getFollowingId, followUserId);
