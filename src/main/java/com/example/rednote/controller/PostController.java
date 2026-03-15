@@ -26,7 +26,7 @@ public class PostController {
     @GetMapping
     @Operation(summary = "获取全部帖子", description = "返回所有贴子，支持分页")
     public Result<Page<PostPO>> list(@RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "-1") int size) {
+                                     @RequestParam(defaultValue = "-1") int size) {
         return Result.success(postService.page(new Page<>(page, size)));
     }
 

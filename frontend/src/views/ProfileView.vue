@@ -23,7 +23,6 @@
         </div>
       </div>
     </div>
-
     <div class="profile-content">
       <el-tabs v-model="activeTab">
         <el-tab-pane label="笔记" name="posts">
@@ -203,7 +202,6 @@ const activeTab = ref('posts')
     flex-direction: column;
     text-align: center;
   }
-
   .profile-avatar {
     margin-right: 0;
     margin-bottom: 20px;

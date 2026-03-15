@@ -8,6 +8,13 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: Layout,
+      children:[
+        {
+          path:'explore',
+          name:'explore',
+          component: () => import('@/views/ExploreView.vue'),
+        }
+      ]
     },
     {
       path: '/profile',
@@ -15,15 +22,28 @@ const router = createRouter({
       component: () => import('@/views/ProfileView.vue'),
     },
     {
-      path: '/register',
-      name: 'register',
-      component: () => import('@/views/RegisterView.vue'),
+      path: '/publish',
+      name: 'publish',
+      component: () => import('@/views/PublishView.vue'),
+      children:[
+        {
+          path:'/video',
+          name:'publish-video',
+          component: () => import('@/components/UploadVideo.vue'),
+        },
+        {
+          path:'/image',
+          name:'publish-image',
+          component: () => import('@/components/UploadImage.vue'),
+        },
+        {
+          path:'/article',
+          name:'publish-article',
+          component: () => import('@/components/UploadArticle.vue'),
+        }
+      ]
     },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import('@/views/LoginView.vue'),
-    },
+
   ],
 })
 
