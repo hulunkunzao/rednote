@@ -8,5 +8,7 @@ import com.example.rednote.model.vo.CommentVO;
 import java.util.List;
 
 public interface CommentService  {
+    List<CommentVO> listByPostId(Integer postId);
+
 }
 

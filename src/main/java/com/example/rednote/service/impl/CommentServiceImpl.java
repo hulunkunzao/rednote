@@ -22,4 +22,15 @@ public class CommentServiceImpl  implements CommentService {
 
     private final CommentMapper commentMapper;
     private final PostMapper postMapper;
+
+    @Override
+    public List<CommentVO> listByPostId(Integer postId) {
+        List<CommentPO> commentPOS = commentMapper.selectList(
+                Wrappers.<CommentPO>lambdaQuery().eq(CommentPO::getPostId, postId));
+        if (commentPOS.isEmpty()) {
+            return List.of();
+        }
+        List<CommentVO> commentVOS = BeanUtil.copyToList(commentPOS, CommentVO.class);
+        return commentVOS;
+    }
 }
