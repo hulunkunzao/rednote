@@ -44,4 +44,8 @@ public class CommentServiceImpl  implements CommentService {
         commentPO.setUserId(userId);
         commentMapper.insert(commentPO);
     }
+    @Override
+    public void removeById(Integer id) {
+        commentMapper.deleteById(id);
+    }
 }
