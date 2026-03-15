@@ -99,3 +99,11 @@ CREATE TABLE IF NOT EXISTS `follow` (
   `following_id` BIGINT NOT NULL COMMENT '被关注者ID（博主）',
   `created_time` DATETIME DEFAULT CURRENT_TIMESTAMP
  ) COMMENT='关注表';
+
+CREATE TABLE IF NOT EXISTS `like` (
+   `id` BIGINT NOT NULL AUTO_INCREMENT,
+   `user_id` BIGINT NOT NULL,
+   `post_id` BIGINT NOT NULL,
+   `created_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
+   PRIMARY KEY (`id`)
+)COMMENT='点赞表';
