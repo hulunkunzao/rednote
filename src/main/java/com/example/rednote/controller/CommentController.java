@@ -32,4 +32,11 @@ public class CommentController {
         commentService.insert(commentDTO);
         return Result.success();
     }
+
+    @Operation(summary = "删除评论", description = "根据评论ID删除评论")
+    @DeleteMapping("/{commentId}")
+    public Result delete(@PathVariable Integer commentId) {
+        commentService.removeById(commentId);
+        return Result.success();
+    }
 }
