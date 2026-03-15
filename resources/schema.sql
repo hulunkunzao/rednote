@@ -26,3 +26,76 @@ CREATE TABLE IF NOT EXISTS `comment` (
 	`create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY(`comment_id`)
 ) COMMENT='评论表';
+
+CREATE TABLE IF NOT EXISTS `user_details` (
+  `user_id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+  `phone` VARCHAR(11) UNIQUE COMMENT '手机号',
+  `email` VARCHAR(100) UNIQUE COMMENT '邮箱',
+  `nickname` VARCHAR(50) NOT NULL COMMENT '昵称',
+  `avatar` VARCHAR(255) COMMENT '头像URL',
+  `gender` TINYINT DEFAULT 0 COMMENT '性别：0-未知 1-男 2-女',
+  `bio` VARCHAR(255) COMMENT '个人简介',
+  `follow_count` INTEGER DEFAULT 0 COMMENT '关注数',
+  `fans_count` INTEGER DEFAULT 0 COMMENT '粉丝数',
+  `post_count` INTEGER DEFAULT 0 COMMENT '发布帖子数',
+  `like_receive_count` INTEGER DEFAULT 0 COMMENT '获赞总数',
+  `status` TINYINT DEFAULT 1 COMMENT '状态：0-禁用 1-正常',
+  `last_login_time` DATETIME COMMENT '最后登录时间',
+  `created_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
+  `updated_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+   PRIMARY KEY(`user_id`)
+) COMMENT='用户详情表';
+
+CREATE TABLE IF NOT EXISTS `post_details` (
+  `post_details_id` BIGINT AUTO_INCREMENT COMMENT '帖子详情ID',
+  `post_id` INTEGER UNSIGNED COMMENT '帖子ID',
+  `user_id` INTEGER UNSIGNED  NOT NULL COMMENT '发布者ID',
+  `title` VARCHAR(50) COMMENT '标题',
+  `content` MEDIUMTEXT COMMENT '正文内容',
+  `type` TINYINT DEFAULT 3 COMMENT '类型：1-图文 2-视频 3-纯文字',
+  `topic_ids` VARCHAR(255) COMMENT '关联话题ID，多个用逗号分隔',
+  `cover_image` VARCHAR(500) COMMENT '封面图',
+  `view_count` INTEGER DEFAULT 0 COMMENT '浏览量',
+  `like_count` INTEGER DEFAULT 0 COMMENT '点赞数',
+  `comment_count` INTEGER DEFAULT 0 COMMENT '评论数',
+  `collect_count` INTEGER DEFAULT 0 COMMENT '收藏数',
+  `status` TINYINT DEFAULT 1 COMMENT '状态：0-待审核 1-已发布 2-审核不通过 3-已删除',
+  `audit_remark` VARCHAR(255) COMMENT '审核备注',
+  `audit_time` DATETIME COMMENT '审核时间',
+  `created_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '发布时间',
+  `updated_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY(`post_details_id`)
+) COMMENT='帖子表';
+
+CREATE TABLE IF NOT EXISTS`post_image` (
+  `post_image_id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+  `post_id` INTEGER UNSIGNED NOT NULL COMMENT '帖子ID',
+  `url` VARCHAR(500) NOT NULL COMMENT '图片URL',
+  `created_time` DATETIME DEFAULT CURRENT_TIMESTAMP
+) COMMENT='帖子图片表';
+
+CREATE TABLE IF NOT EXISTS `topic` (
+  `topic_id` INTEGER PRIMARY KEY AUTO_INCREMENT COMMENT '话题ID',
+  `topic_name` VARCHAR(50) NOT NULL COMMENT '话题名称',
+  `topic_description` VARCHAR(200) COMMENT '话题描述',
+  `topic_icon` VARCHAR(500) COMMENT '话题图标',
+  `cover` VARCHAR(500) COMMENT '话题封面',
+  `post_count` INTEGER DEFAULT 0 COMMENT '帖子数',
+  `follow_count` INTEGER DEFAULT 0 COMMENT '关注数',
+  `is_hot` TINYINT DEFAULT 0 COMMENT '是否热门',
+  `created_time` DATETIME DEFAULT CURRENT_TIMESTAMP
+) COMMENT='话题表';
+
+CREATE TABLE IF NOT EXISTS `post_topic` (
+  `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+  `post_id` INTEGER UNSIGNED NOT NULL,
+  `topic_id` INTEGER NOT NULL,
+  `created_time` DATETIME DEFAULT CURRENT_TIMESTAMP
+) COMMENT='帖子话题关联表';
+
+CREATE TABLE IF NOT EXISTS `follow` (
+  `follow_id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+  `follower_id` BIGINT NOT NULL COMMENT '关注者ID（粉丝）',
+  `following_id` BIGINT NOT NULL COMMENT '被关注者ID（博主）',
+  `created_time` DATETIME DEFAULT CURRENT_TIMESTAMP
+ ) COMMENT='关注表';
