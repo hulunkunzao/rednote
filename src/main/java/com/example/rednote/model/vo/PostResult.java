@@ -1,12 +1,16 @@
 package com.example.rednote.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import lombok.Data;
-
-public class PostVO {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class PostResult{
     private Integer postId;
     private Integer userId;
     private String title;
@@ -14,4 +18,6 @@ public class PostVO {
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private LocalDateTime createTime;
     private String coverUrl;
+    private String userName;
+    private String userAvatar;
 }

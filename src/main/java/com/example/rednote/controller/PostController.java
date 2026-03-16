@@ -1,5 +1,6 @@
 package com.example.rednote.controller;
 
+import com.example.rednote.model.vo.PostResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/posts")
 @Tag(name = "帖子接口", description = "帖子相关接口")
@@ -30,6 +33,13 @@ public class PostController {
         return Result.success(postService.page(new Page<>(page, size)));
     }
 
+    @GetMapping("/list")
+    @Operation(summary = "获取全部帖子", description = "适用于主页的返回所有贴子,带用户头像、用户名")
+    public Result<List<PostResult>> listWithUserInfo() {
+        List<PostResult> postResults = postService.listWithUserInfo();
+        return Result.success(postResults);
+    }
+
     @GetMapping("/{postId}")
     @Operation(summary = "获取帖子详情", description = "根据帖子ID返回详细信息")
     public Result<PostPO> getPost(@PathVariable Integer postId) {
@@ -42,4 +52,6 @@ public class PostController {
         postService.removeById(postId);
         return Result.success();
     }
+
+    
 }

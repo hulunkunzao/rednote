@@ -19,4 +19,5 @@ public class PostPO {
     private String content;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
     private LocalDateTime createTime;
+    private String coverUrl;
 }

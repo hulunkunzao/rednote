@@ -1,7 +1,10 @@
 package com.example.rednote.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.rednote.model.po.TopicPO;
 
-public interface TopicService extends IService<TopicPO> {
+import com.example.rednote.model.vo.TopicVO;
+
+import java.util.List;
+
+public interface TopicService {
+    List<TopicVO> list();
 }

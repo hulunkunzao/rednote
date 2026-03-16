@@ -35,7 +35,7 @@ public class LikeServiceImpl extends ServiceImpl<LikeMapper, LikePO> implements 
         lambdaQuery.eq(LikePO::getPostId,postId)
                 .eq(LikePO::getUserId,userId);
         boolean exists = likeMapper.exists(lambdaQuery);
-        if(!exists){   //未点赞，执行点赞操作
+        if(!exists){
             int insert_cnt = likeMapper.insert(likePO);
             UpdateWrapper<PostDetailsPO> wrapper = new UpdateWrapper<PostDetailsPO>();
             wrapper.setSql("like_count = like_count+1")
@@ -43,7 +43,6 @@ public class LikeServiceImpl extends ServiceImpl<LikeMapper, LikePO> implements 
             postDetailsMapper.update(wrapper);
             return "已点赞！";
         }
-        // 已点赞，执行取消点赞操作
         int delete_cnt = likeMapper.delete(lambdaQuery);
         UpdateWrapper<PostDetailsPO> wrapper = new UpdateWrapper<PostDetailsPO>();
         wrapper.setSql("like_count = like_count-1")

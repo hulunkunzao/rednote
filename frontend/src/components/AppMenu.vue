@@ -5,6 +5,10 @@
         <el-icon><HomeFilled /></el-icon>
         <span>发现</span>
       </el-menu-item>
+      <el-menu-item index="/discover">
+        <el-icon><HomeFilled /></el-icon>
+        <span>主页</span>
+      </el-menu-item>
       <el-menu-item index="/publish">
         <el-icon><CirclePlus /></el-icon>
         <span>发布</span>
