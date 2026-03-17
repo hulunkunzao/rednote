@@ -23,10 +23,10 @@
         :lg="6" 
         class="post-col"
       >
-        <el-card :body-style="{ padding: '0px' }" @click="showDetail(post.postId)">
+        <el-card :body-style="{ padding: '0px' }" @click="showDetail(post)">
           <div class="post-image">
             <img 
-              :src="post.coverUrl" 
+              :src="post.coverImage" 
               :alt="post.title"
             >
           </div>
@@ -82,24 +82,24 @@
               <p>暂无图片</p>
           </div>
         </div>
-        
+
         <div class="right-card">
           <!-- 顶部固定区域：用户信息 + 帖子内容 -->
           <div class="right-card-header">
             <!-- 顶部用户信息 -->
             <div class="user-header">
-              <img class="avatar" :src="bloggerInfo.avatar" alt="头像" />
-              <span class="username">{{ bloggerInfo.username }}</span>
-              <button class="follow-btn">关注</button>
+              <img class="avatar" :src="bloggerInfo.bloggerAvatar" alt="头像" />
+              <span class="username">{{ bloggerInfo.bloggerName }}</span>
+              <button class="follow-btn" @click="handleFollow">{{ followed ? '取消关注' : '关注' }}</button>
             </div>
 
             <!-- 正文内容 -->
             <div class="post-content">
-              <p class="post-title">{{ postDetail.title }}</p>
+              <p class="post-title">{{ post.title }}</p>
               <p class="post-desc">
-                {{ postDetail.content }}
+                {{ post.content }}
               </p>
-              <p class="post-meta">发布时间{{ postDetail.createdTime }}</p>
+              <p class="post-meta">发布时间{{ post.createTime }}</p>
             </div>
           </div>
 
@@ -127,7 +127,7 @@
               @keyup.enter="handleSendComment"
               />
               <button class="send-btn" @click="handleSendComment">发送</button>
-              <button class="like-btn" @click="handleLike">点赞</button>
+              <button class="like-btn" @click="handleLike">{{ isLiked ? '取消点赞' : '点赞' }}</button>
               <span>{{ postDetail.likeCount }}</span>
             </div>
           </div>
@@ -144,30 +144,34 @@
 <script>
 import { getPostListApi,getPostDetailApi,getTopicListApi,getPostImagesApi } from '@/api/post'
 import { getCommentListApi,addCommentApi } from '@/api/comment'
-import { getUserInfoApi } from '@/api/user'
-import { isLikedApi } from '@/api/like'
+import { isLikedApi,likedApi } from '@/api/like'
 import { ElMessage } from 'element-plus' 
+import { followUserApi,isFollowedApi } from '@/api/user'
 import '@/assets/baseHome.css'
 export default {
     data() {
         return {
-            postList: [],
-            page: 1,
-            size: 50,
-            postDetail: {},
-            detailVisible: false,
-            topicList: [],
-            topicId: 0,
-            imageUrlList: [],
-            currentImageIndex: 0,
-            commentList: [],
-            commentInfo: {
-              postId: 0,
-              content: '',
-            },
-            currentPostId: 0,
-            isLiked: false,
-            bloggerInfo: {},
+          postList: [],
+          post: {},
+          postDetail: {},
+          detailVisible: false,
+          topicList: [],
+          topicId: 0,
+          imageUrlList: [],
+          currentImageIndex: 0,
+          commentList: [],
+          commentInfo: {
+            postId: 0,
+            content: '',
+          },
+          currentPostId: 0,
+          isLiked: false,
+          bloggerInfo: {
+            bloggerId: 0,
+            bloggerName: '',
+            bloggerAvatar: '',
+          },
+          followed: false,
         }
     },  
     methods: {
@@ -180,16 +184,23 @@ export default {
               this.postList = response.data
           } catch (error) {
               console.error('获取帖子列表失败:', error)
-          } finally {
-              
           }
         },
-        async fetchUserInfo(){
+        async handleFollow(){
           try {
-              const response = await getUserInfoApi(this.postDetail.userId)
-              this.bloggerInfo = response.data
+            const response = await followUserApi(this.bloggerInfo.bloggerId)
+            this.followed = response.data
+            if (response.code === 500){
+              ElMessage.error('不能关注自己')
+              return
+            }
+            if (this.followed) {
+              ElMessage.success('关注成功')
+            } else {
+              ElMessage.success('已经取消关注')
+            }
           } catch (error) {
-              console.error('获取用户信息失败:', error)
+            ElMessage.error('操作失败，请稍后重试')
           }
         },
         async handleSendComment() {
@@ -237,11 +248,10 @@ export default {
             } catch (error) {
                 console.error('获取帖子详情失败:', error)
             }
-            this.fetchUserInfo()
         },
         async handleLike(){
           try {
-              const response = await isLikedApi(this.currentPostId)
+              const response = await likedApi(this.currentPostId)
               this.isLiked = response.data
               if(this.isLiked){
                 ElMessage.success('点赞成功')
@@ -254,21 +264,41 @@ export default {
               console.error('点赞失败:', error)
           }
         },
+        async isLike(postId){
+          try {
+            const response = await isLikedApi(postId)
+            this.isLiked = response.data
+          } catch (error) {
+            ElMessage.error('操作失败，请稍后重试')
+          }
+        },
         handleTabClick(tab) {
           const topicId = parseInt(tab.paneName) 
           this.topicId = topicId
           this.fetchPosts()
         },
-        showDetail(postId) {
-          this.currentPostId = postId
-          this.commentInfo.postId = postId
-          console.log(postId)
-          this.detailVisible = true
+        async isFollowed(bloggerId){
+          try {
+            const response = await isFollowedApi(bloggerId)
+            this.followed = response.data
+          } catch (error) {
+            ElMessage.error('操作失败，请稍后重试')
+          }
+        },
+        showDetail(post) {
+          this.post = post
+          this.currentPostId = post.postId
+          this.commentInfo.postId = post.postId
+          this.bloggerInfo.bloggerId = post.userId
+          this.bloggerInfo.bloggerName = post.userName
+          this.bloggerInfo.bloggerAvatar = post.userAvatar
           this.currentImageIndex = 0 
-          this.getPostDetail(postId)
-          this.fetchPostImages(postId)
-          this.fetchCommentList(postId)
-          
+          this.getPostDetail(post.postId)
+          this.fetchPostImages(post.postId)
+          this.fetchCommentList(post.postId)
+          this.isFollowed(post.userId)
+          this.isLike(post.postId)
+          this.detailVisible = true
         },
         handleClose() {
             this.detailVisible = false

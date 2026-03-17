@@ -22,5 +22,5 @@ public class TopicPO {
     private Integer followCount;
     private Boolean isHot;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
-    private LocalDateTime createdTime;
+    private LocalDateTime createTime;
 }

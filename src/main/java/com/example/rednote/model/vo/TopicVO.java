@@ -12,7 +12,7 @@ public class TopicVO {
     private String topicName;
     private String topicDescription;
     private String topicIcon;
-    private String coverUrl;
+    private String cover;
     private Integer postCount;
     private Integer followCount;
     private Boolean isHot;

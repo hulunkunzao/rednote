@@ -18,5 +18,5 @@ public class PostDTO {
     @Schema(description = "帖子内容", requiredMode = RequiredMode.REQUIRED)
     private String content;
     @Schema(description = "帖子封面url", requiredMode = RequiredMode.REQUIRED)
-    private String coverUrl;
+    private String coverImage;
 }

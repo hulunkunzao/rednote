@@ -17,7 +17,7 @@ public class PostResult{
     private String content;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private LocalDateTime createTime;
-    private String coverUrl;
+    private String coverImage;
     private String userName;
     private String userAvatar;
 }

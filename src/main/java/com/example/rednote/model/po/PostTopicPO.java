@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @TableName("post_topic")
 public class PostTopicPO {
     @TableId(type = IdType.AUTO)
-    private Integer id;
+    private Integer postTopicId;
     private Integer postId;
     private Integer topicId;
 

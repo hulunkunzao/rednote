@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @TableName("follow")
 public class FollowPO {
     @TableId(type = IdType.AUTO)
-    private Integer fowllowId;
+    private Integer followId;
     private Integer followerId;
     private Integer followingId;
 

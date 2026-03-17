@@ -1,21 +1,13 @@
 <template>
   <el-menu default-active="$route.path" router class="el-menu-vertical-demo menu-container">
     <div class="menu-top">
-      <el-menu-item index="/explore">
-        <el-icon><HomeFilled /></el-icon>
-        <span>发现</span>
-      </el-menu-item>
       <el-menu-item index="/discover">
         <el-icon><HomeFilled /></el-icon>
-        <span>主页</span>
+        <span>发现</span>
       </el-menu-item>
       <el-menu-item index="/publish">
         <el-icon><CirclePlus /></el-icon>
         <span>发布</span>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><Message /></el-icon>
-        <span>通知</span>
       </el-menu-item>
       <el-menu-item index="/profile">
         <el-icon><User /></el-icon>

@@ -74,6 +74,13 @@ public class UserController {
         return Result.success(isFollow);
     }
 
+    @GetMapping("/follow/{followUserId}")
+    @Operation(summary = "判断是否关注用户")
+    public Result<Boolean> isFollow(@PathVariable Integer followUserId) {
+        Boolean isFollow = userService.isFollow(followUserId);
+        return Result.success(isFollow);
+    }
+
     @GetMapping("/{userId}/posts")
     @Operation(summary = "查询用户发布的帖子列表")
     public Result<Page<PostVO>> listUserPosts(

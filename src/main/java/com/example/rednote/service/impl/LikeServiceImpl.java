@@ -50,4 +50,15 @@ public class LikeServiceImpl extends ServiceImpl<LikeMapper, LikePO> implements 
         postDetailsMapper.update(wrapper);
         return false;
     }
+
+    @Override
+    public Boolean isLike(Integer postId) {
+        String userIdStr = ThreadLocalUtils.get("userId");
+        Integer userId = Integer.parseInt(userIdStr);
+        LambdaQueryWrapper<LikePO> lambdaQuery = new LambdaQueryWrapper<>();
+        lambdaQuery.eq(LikePO::getPostId,postId)
+                .eq(LikePO::getUserId,userId);
+        boolean exists = likeMapper.exists(lambdaQuery);
+        return exists;
+    }
 }

@@ -10,6 +10,7 @@ import com.example.rednote.mapper.PostMapper;
 import com.example.rednote.mapper.UserDetailsMapper;
 import com.example.rednote.model.dto.PasswordUpdateDTO;
 import com.example.rednote.model.dto.UserUpdateDTO;
+import com.example.rednote.model.exception.BaseException;
 import com.example.rednote.model.po.FollowPO;
 import com.example.rednote.model.po.PostPO;
 import com.example.rednote.model.po.UserDetailsPO;
@@ -94,17 +95,15 @@ public class UserServiceImpl implements UserService {
 
         UserDetailsPO details = new UserDetailsPO();
         details.setUserId(userId);
-        details.setNickname(updateDTO.getNickname());
-        details.setAvatar(updateDTO.getAvatar());
         details.setGender(updateDTO.getGender());
         details.setBio(updateDTO.getBio());
         details.setPhone(updateDTO.getPhone());
         details.setEmail(updateDTO.getEmail());
-        details.setUpdatedTime(LocalDateTime.now());
+        details.setUpdateTime(LocalDateTime.now());
 
         UserDetailsPO exist = userDetailsMapper.selectById(userId);
         if (exist == null) {
-            details.setCreatedTime(LocalDateTime.now());
+            details.setCreateTime(LocalDateTime.now());
             userDetailsMapper.insert(details);
         } else {
             userDetailsMapper.updateById(details);
@@ -144,7 +143,7 @@ public class UserServiceImpl implements UserService {
         Integer currentUserId = Integer.parseInt(userIdStr);
 
         if (Objects.equals(currentUserId, followUserId)) {
-            throw new IllegalArgumentException("不能关注自己");
+            throw new BaseException("不能关注自己");
         }
 
         // 检查是否已关注
@@ -177,5 +176,17 @@ public class UserServiceImpl implements UserService {
         BeanUtil.copyProperties(postPage, voPage);
         voPage.setRecords(BeanUtil.copyToList(postPage.getRecords(), PostVO.class));
         return voPage;
+    }
+
+    @Override
+    public Boolean isFollow(Integer followUserId) {
+        String userIdStr = ThreadLocalUtils.get("userId");
+        Integer currentUserId = Integer.parseInt(userIdStr);
+
+        LambdaQueryWrapper<FollowPO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(FollowPO::getFollowerId, currentUserId)
+                .eq(FollowPO::getFollowingId, followUserId);
+        FollowPO exist = followMapper.selectOne(wrapper);
+        return exist != null;
     }
 }

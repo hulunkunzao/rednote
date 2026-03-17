@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 
+@Data
 public class PostVO {
     private Integer postId;
     private Integer userId;
@@ -13,5 +14,5 @@ public class PostVO {
     private String content;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private LocalDateTime createTime;
-    private String coverUrl;
+    private String coverImage;
 }

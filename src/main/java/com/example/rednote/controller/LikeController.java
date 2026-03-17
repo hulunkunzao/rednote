@@ -5,10 +5,7 @@ import com.example.rednote.service.LikeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/likes")
@@ -22,5 +19,11 @@ public class LikeController {
     @PostMapping("/isliked/{postId}")
     public Result<Boolean> isLiked(@PathVariable Integer postId){
         return Result.success(likeService.isLiked(postId));
+    }
+
+    @Operation(summary = "判断是否已赞",description = "根据postId判断是否已赞")
+    @GetMapping("/isliked/{postId}")
+    public Result<Boolean> isLike(@PathVariable Integer postId){
+        return Result.success(likeService.isLike(postId));
     }
 }

@@ -11,9 +11,9 @@ import lombok.Data;
 @TableName("`like`")
 public class LikePO {
     @TableId(type = IdType.AUTO)
-    private Integer id;
+    private Integer likeId;
     private Integer userId;
     private Integer postId;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private DateTime createdTime;
+    private DateTime createTime;
 }

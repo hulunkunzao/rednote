@@ -17,5 +17,5 @@ public class PostImagePO {
     private String url;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
-    private LocalDateTime createdTime;
+    private LocalDateTime createTime;
 }

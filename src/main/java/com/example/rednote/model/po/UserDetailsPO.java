@@ -13,11 +13,10 @@ import java.time.LocalDateTime;
 public class UserDetailsPO {
 
     @TableId(type = IdType.AUTO)
+    private Integer userDetailsId;
     private Integer userId;
     private String phone;
     private String email;
-    private String nickname;
-    private String avatar;
     private Integer gender;
     private String bio;
     private Integer followCount;
@@ -27,7 +26,7 @@ public class UserDetailsPO {
     private Integer status;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
-    private LocalDateTime createdTime;
+    private LocalDateTime createTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
-    private LocalDateTime updatedTime;
+    private LocalDateTime updateTime;
 }

@@ -10,11 +10,6 @@ const router = createRouter({
       component: Layout,
       children:[
         {
-          path:'explore',
-          name:'explore',
-          component: () => import('@/views/ExploreView.vue'),
-        },
-        {
           path:'discover',
           name:'discover',
           component: () => import('@/views/HomeView.vue'),

@@ -28,4 +28,6 @@ public interface UserService {
     Boolean followUser(Integer followUserId);
 
     Page<PostVO> listUserPosts(Integer userId, Integer page, Integer size);
+
+    Boolean isFollow(Integer followUserId);
 }
