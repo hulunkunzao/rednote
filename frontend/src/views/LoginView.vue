@@ -66,6 +66,7 @@ export default {
         const valid = await this.$refs.formRef.validate()
         if (valid) {
           const res = await loginApi(this.form)
+          console.log(this.form.password)
           ElMessage.success('登录成功')
           localStorage.setItem('token', res.data)
           this.$router.push('/')

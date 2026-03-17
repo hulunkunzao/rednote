@@ -35,8 +35,9 @@ public class PostController {
 
     @GetMapping("/list")
     @Operation(summary = "获取全部帖子", description = "适用于主页的返回所有贴子,带用户头像、用户名")
-    public Result<List<PostResult>> listWithUserInfo() {
-        List<PostResult> postResults = postService.listWithUserInfo();
+    public Result<List<PostResult>> listWithUserInfo(
+            @RequestParam(defaultValue = "0") int topicId) {
+        List<PostResult> postResults = postService.listWithUserInfo(topicId);
         return Result.success(postResults);
     }
 

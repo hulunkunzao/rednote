@@ -15,6 +15,7 @@ import com.example.rednote.model.po.PostPO;
 import com.example.rednote.model.po.UserDetailsPO;
 import com.example.rednote.model.vo.PostVO;
 import com.example.rednote.model.vo.UserDetailsVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,7 @@ import java.util.Objects;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UserDetailsMapper userDetailsMapper;
@@ -64,7 +66,9 @@ public class UserServiceImpl implements UserService {
         QueryWrapper<UserPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", loginDTO.getUsername());
         UserPO userPO = userMapper.selectOne(queryWrapper);
-        if (BCrypt.checkpw(loginDTO.getPassward(), userPO.getPassword())) {
+        log.info(userPO.toString());
+        log.info(loginDTO.toString());
+        if (BCrypt.checkpw(loginDTO.getPassword(), userPO.getPassword())) {
             return jwtUtils.generateToken(Integer.toString(userPO.getUserId()), userPO.getUsername());
         } else {
             throw new LoginFailedException("用户名或密码错误");

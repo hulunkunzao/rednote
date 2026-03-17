@@ -1,0 +1,17 @@
+package com.example.rednote.model.vo;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
+public class CommentResultVO {
+    private Integer commentId;
+    private Integer userId;
+    private String content;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime createTime;
+    private String userName;
+    private String userAvatar;
+}

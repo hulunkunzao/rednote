@@ -25,9 +25,9 @@ public class LikeServiceImpl extends ServiceImpl<LikeMapper, LikePO> implements 
 
     @Override
     @Transactional
-    public String isLiked(Long postId) {
-        String userIdstr = ThreadLocalUtils.get("userId");
-        Long userId = Long.parseLong(userIdstr);
+    public Boolean isLiked(Integer postId) {
+        String userIdStr = ThreadLocalUtils.get("userId");
+        Integer userId = Integer.parseInt(userIdStr);
         LikePO likePO = new LikePO();
         likePO.setUserId(userId);
         likePO.setPostId(postId);
@@ -41,13 +41,13 @@ public class LikeServiceImpl extends ServiceImpl<LikeMapper, LikePO> implements 
             wrapper.setSql("like_count = like_count+1")
                     .eq("post_id",postId);
             postDetailsMapper.update(wrapper);
-            return "已点赞！";
+            return true;
         }
         int delete_cnt = likeMapper.delete(lambdaQuery);
         UpdateWrapper<PostDetailsPO> wrapper = new UpdateWrapper<PostDetailsPO>();
         wrapper.setSql("like_count = like_count-1")
                 .eq("post_id",postId);
         postDetailsMapper.update(wrapper);
-        return "已取消点赞";
+        return false;
     }
 }

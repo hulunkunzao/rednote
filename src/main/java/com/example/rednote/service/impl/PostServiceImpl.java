@@ -1,6 +1,9 @@
 package com.example.rednote.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.rednote.mapper.PostTopicMapper;
 import com.example.rednote.mapper.UserMapper;
+import com.example.rednote.model.po.PostTopicPO;
 import com.example.rednote.model.po.UserPO;
 import com.example.rednote.model.vo.PostResult;
 import org.springframework.beans.BeanUtils;
@@ -14,6 +17,7 @@ import com.example.rednote.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,11 +27,19 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostPO> implements 
 
     private final PostMapper postMapper;
     private final UserMapper userMapper;
+    private final PostTopicMapper postTopicMapper;
 
     @Override
     @Transactional
-    public List<PostResult> listWithUserInfo() {
-        List<PostPO> postPOS = list();
+    public List<PostResult> listWithUserInfo(int topicId) {
+        LambdaQueryWrapper<PostPO> wrapper = new LambdaQueryWrapper<>();
+        if(topicId != 0){
+            List<PostTopicPO> postTopicPOS = postTopicMapper
+                    .selectList(new LambdaQueryWrapper<PostTopicPO>().eq(PostTopicPO::getTopicId, topicId));
+            List<Integer> postIds = postTopicPOS.stream().map(PostTopicPO::getPostId).toList();
+            wrapper.in(PostPO::getPostId, postIds);
+        }
+        List<PostPO> postPOS = postMapper.selectList(wrapper);
         List<PostResult> postResults = postPOS.stream().map(postPO -> {
             UserPO userPO = userMapper.selectById(postPO.getUserId());
             PostResult postResult = new PostResult();

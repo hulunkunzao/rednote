@@ -20,7 +20,7 @@ public class LikeController {
 
     @Operation(summary = "点赞/取消点赞",description = "根据postId点赞/取消点赞")
     @PostMapping("/isliked/{postId}")
-    public Result<String> isLiked(@PathVariable Long postId){
+    public Result<Boolean> isLiked(@PathVariable Integer postId){
         return Result.success(likeService.isLiked(postId));
     }
 }

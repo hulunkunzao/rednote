@@ -7,5 +7,5 @@ import com.example.rednote.model.vo.PostResult;
 import java.util.List;
 
 public interface PostService extends IService<PostPO> {
-    List<PostResult> listWithUserInfo();
+    List<PostResult> listWithUserInfo(int topicId);
 }
