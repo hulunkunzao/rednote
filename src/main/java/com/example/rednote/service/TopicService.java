@@ -5,4 +5,5 @@ import com.example.rednote.model.vo.TopicVO;
 import java.util.List;
 
 public interface TopicService {
+    List<TopicVO> list();
 }

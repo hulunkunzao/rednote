@@ -14,4 +14,9 @@ import java.util.List;
 @Service
 public class TopicServiceImpl implements TopicService {
     private final TopicMapper topicMapper;
+    @Override
+    public List<TopicVO> list() {
+        List<TopicPO> topicPOS = topicMapper.selectList(null);
+        return BeanUtil.copyToList(topicPOS, TopicVO.class);
+    }
 }
