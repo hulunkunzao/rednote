@@ -49,7 +49,19 @@
       <div class="modal-content-wrap">
         <div class="left-card">
           <div class="image-container" v-if="imageUrlList.length > 0">
+            <video 
+                v-if="isVideo(imageUrlList[currentImageIndex])"
+                :src="imageUrlList[currentImageIndex]"
+                :alt="`Video ${currentImageIndex + 1}`"
+                class="post-image"
+                controls
+                autoplay
+                muted
+                loop
+            ></video>
+            <!-- 图片显示 -->
             <img 
+                v-else
                 :src="imageUrlList[currentImageIndex]" 
                 :alt="`Image ${currentImageIndex + 1}`"
                 class="post-image"
@@ -316,10 +328,14 @@ export default {
           if (this.currentImageIndex < this.imageUrlList.length - 1) {
             this.currentImageIndex++
           }
+        },
+        isVideo(url) {
+          const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi']
+          return videoExtensions.some(ext => url.toLowerCase().endsWith(ext))
         }
     },
     mounted() {
-        this.fetchBloggers()
+      this.fetchBloggers()
     }
 }
 </script>
