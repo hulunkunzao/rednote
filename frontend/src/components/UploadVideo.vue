@@ -109,7 +109,7 @@
             </div>
             <div class="phone-preview">
               <div class="phone-header">
-                <span class="time">9:41</span>
+                <span class="time">{{ currentTime }}</span>
                 <div class="status-icons">
                   <i class="el-icon-signal"></i>
                   <i class="el-icon-wifi"></i>
@@ -123,8 +123,8 @@
                 </div>
                 <div class="note-info">
                   <div class="user-info">
-                    <img src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" alt="头像" class="avatar">
-                    <span class="username">小红薯65386122 <i class="el-icon-star-on vip-icon"></i></span>
+                    <img :src="userInfo.avatar" alt="头像" class="avatar">
+                    <span class="username">{{ userInfo.username }} <i class="el-icon-star-on vip-icon"></i></span>
                   </div>
                   <p class="publish-time">编辑于 刚刚公开可见</p>
                   <div class="interact-icons">
@@ -150,6 +150,7 @@ import { getAllTopicListApi } from '@/api/topic'
 import { uploadApi } from '@/api/file'
 import axios from 'axios'
 import { createPostApi } from '@/api/post'
+import { getCurrentUserInfo } from '@/api/user'
 // 核心状态
 const isUploadStarted = ref(false)
 const videoFileList = ref([])
@@ -160,7 +161,14 @@ const remainTime = ref('0s')
 const uploadStartTimestamp = ref(0)
 const uploadedVideoUrl = ref('')
 const isUploading = ref(false)
+const currentTime = ref(new Date().toLocaleTimeString('zh-CN', { timeZone: 'Asia/Shanghai' }))
 
+//写一个函数，用于更新当前时间
+const updateCurrentTime = () => {
+  currentTime.value = new Date().toLocaleTimeString('zh-CN', { timeZone: 'Asia/Shanghai' });
+}
+
+setInterval(updateCurrentTime, 1000)
 // 笔记数据
 const noteForm = reactive({
   title: '',
@@ -213,9 +221,19 @@ const preloadTopics = async () => {
     isLoadingTopics.value = false
   }
 }
+const userInfo = ref({})
+const fetchUserInfo = async () => {
+  try {
+    const response = await getCurrentUserInfo()
+    userInfo.value = response.data
+  } catch (error) {
+    console.error('获取用户信息失败:', error)
+  }
+}
 
 onMounted(() => {
   preloadTopics()
+  fetchUserInfo()
 })
 
 const toggleTopic = (topicId) => {
