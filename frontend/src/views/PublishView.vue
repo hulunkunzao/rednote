@@ -13,9 +13,11 @@
                   </span>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item command="/video"><el-icon><VideoCamera /></el-icon>上传视屏</el-dropdown-item>
+                  <el-dropdown-item command="/video"><el-icon><VideoCamera /></el-icon>上传视频</el-dropdown-item>
                   <el-dropdown-item command="/image"><el-icon><Picture /></el-icon>上传图文</el-dropdown-item>
                   <el-dropdown-item command="/article"><el-icon><EditPen /></el-icon>写长文</el-dropdown-item>
+                  <!-- 返回主页 -->
+                  <el-dropdown-item command="/discover"><el-icon><HomeFilled /></el-icon>返回主页</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>

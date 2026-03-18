@@ -16,7 +16,7 @@ public class PostDetailsPO {
     private Integer postDetailsId;
     private Integer postId;
     private Integer type;
-    private Integer topicIds;
+    private String topicIds;
     private Integer viewCount;
     private Integer likeCount;
     private Integer commentCount;
