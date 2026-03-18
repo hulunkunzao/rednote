@@ -12,3 +12,5 @@ export const isFollowedApi = (followUserId) => request.get(`/users/follow/${foll
 export const getBloggersApi = () => request.get(`/users/followers`)
 
 export const getCurrentUserInfo = () => request.get(`/users/current/me`)
+
+export const getCurrentUserDetail = () => request.get(`/users/current`)

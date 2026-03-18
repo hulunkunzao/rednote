@@ -18,6 +18,7 @@
                 :alt="userInfo.username" 
                 class="user-avatar"
               >
+              <span>(粉丝共：{{ userDetail.fansCount }}人)</span>
             </div>
           </div>
         </el-header>
@@ -31,10 +32,11 @@
 
 <script setup>
 import AppMenu from './AppMenu.vue'
-import { getCurrentUserInfo } from '@/api/user'
+import { getCurrentUserInfo, getCurrentUserDetail } from '@/api/user'
 import { ref, onMounted } from 'vue'
 
 const userInfo = ref({})
+const userDetail = ref({})
 
 const fetchUserInfo = async () => {
   try {
@@ -44,9 +46,18 @@ const fetchUserInfo = async () => {
     console.error('获取用户信息失败:', error)
   }
 }
+const fetchUserDetail = async () => {
+  try {
+    const response = await getCurrentUserDetail()
+    userDetail.value = response.data
+  } catch (error) {
+    console.error('获取用户详情失败:', error)
+  }
+}
 
 onMounted(() => {
   fetchUserInfo()
+  fetchUserDetail()
 })
 </script>
 

@@ -2,6 +2,7 @@ package com.example.rednote.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.rednote.common.utils.ThreadLocalUtils;
@@ -11,9 +12,7 @@ import com.example.rednote.mapper.UserDetailsMapper;
 import com.example.rednote.model.dto.PasswordUpdateDTO;
 import com.example.rednote.model.dto.UserUpdateDTO;
 import com.example.rednote.model.exception.BaseException;
-import com.example.rednote.model.po.FollowPO;
-import com.example.rednote.model.po.PostPO;
-import com.example.rednote.model.po.UserDetailsPO;
+import com.example.rednote.model.po.*;
 import com.example.rednote.model.vo.PostVO;
 import com.example.rednote.model.vo.UserDetailsVO;
 import lombok.extern.slf4j.Slf4j;
@@ -26,12 +25,12 @@ import com.example.rednote.mapper.UserMapper;
 import com.example.rednote.model.dto.LoginDTO;
 import com.example.rednote.model.dto.UserDTO;
 import com.example.rednote.model.exception.LoginFailedException;
-import com.example.rednote.model.po.UserPO;
 import com.example.rednote.model.vo.UserVO;
 import com.example.rednote.service.UserService;
 
 import cn.hutool.crypto.digest.BCrypt;
 import lombok.AllArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,6 +40,7 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 @Slf4j
+@Transactional
 public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UserDetailsMapper userDetailsMapper;
@@ -140,6 +140,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Boolean followUser(Integer followUserId){
         String userIdStr = ThreadLocalUtils.get("userId");
         Integer currentUserId = Integer.parseInt(userIdStr);
@@ -156,6 +157,15 @@ public class UserServiceImpl implements UserService {
 
         if (exist != null) {
             followMapper.delete(wrapper);
+            UpdateWrapper<UserDetailsPO> userDetailsPOUpdateWrapper = new UpdateWrapper<>();
+            userDetailsPOUpdateWrapper.setSql("fans_count = fans_count-1")
+                    .eq("user_id",followUserId);
+            userDetailsMapper.update(userDetailsPOUpdateWrapper);
+
+            UpdateWrapper<UserDetailsPO> userUpdateWrapper = new UpdateWrapper<>();
+            userUpdateWrapper.setSql("follow_count = follow_count-1")
+                    .eq("user_id",currentUserId);
+            userDetailsMapper.update(userUpdateWrapper);
             return false;
         } else {
             FollowPO follow = new FollowPO();
@@ -163,6 +173,17 @@ public class UserServiceImpl implements UserService {
             follow.setFollowingId(followUserId);
             follow.setCreateTime(LocalDateTime.now());
             followMapper.insert(follow);
+
+            UpdateWrapper<UserDetailsPO> userDetailsPOUpdateWrapper = new UpdateWrapper<>();
+            userDetailsPOUpdateWrapper.setSql("fans_count = fans_count+1")
+                    .eq("user_id",followUserId);
+            userDetailsMapper.update(userDetailsPOUpdateWrapper);
+
+            UpdateWrapper<UserDetailsPO> userUpdateWrapper = new UpdateWrapper<>();
+            userUpdateWrapper.setSql("follow_count = follow_count+1")
+                    .eq("user_id",currentUserId);
+            userDetailsMapper.update(userUpdateWrapper);
+
             return true;
         }
     }

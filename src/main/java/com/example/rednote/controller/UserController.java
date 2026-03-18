@@ -103,4 +103,5 @@ public class UserController {
     public Result<UserVO> getCurrentUserInfo() {
         return Result.success(userService.getCurrentUser());
     }
+
 }
