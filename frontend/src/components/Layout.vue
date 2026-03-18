@@ -7,8 +7,18 @@
       <el-container>
         <el-header class="header">
           <div class="header-content">
-            <img src="/logo.png" alt="logo" class="logo">
-            <h2>欢迎使用轻量版小宏书</h2>
+            <div class="header-left">
+              <img src="/logo.png" alt="logo" class="logo">
+              <h2>欢迎使用轻量版小宏书</h2>
+            </div>
+            <div class="header-right" v-if="userInfo.username">
+              <span class="user-name">{{ userInfo.username }}</span>
+              <img 
+                :src="userInfo.avatar" 
+                :alt="userInfo.username" 
+                class="user-avatar"
+              >
+            </div>
           </div>
         </el-header>
         <el-main>
@@ -21,6 +31,23 @@
 
 <script setup>
 import AppMenu from './AppMenu.vue'
+import { getCurrentUserInfo } from '@/api/user'
+import { ref, onMounted } from 'vue'
+
+const userInfo = ref({})
+
+const fetchUserInfo = async () => {
+  try {
+    const response = await getCurrentUserInfo()
+    userInfo.value = response.data
+  } catch (error) {
+    console.error('获取用户信息失败:', error)
+  }
+}
+
+onMounted(() => {
+  fetchUserInfo()
+})
 </script>
 
 <style scoped>
@@ -41,12 +68,37 @@ import AppMenu from './AppMenu.vue'
 .header-content {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
   gap: 10px;
 }
 
-.header-content h2 {
+.header-left h2 {
   font-style: italic;
   margin: 0;
   color: red;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-name {
+  font-size: 14px;
+  color: #333;
+}
+
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 </style>

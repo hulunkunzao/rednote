@@ -13,6 +13,11 @@ const router = createRouter({
           path:'discover',
           name:'discover',
           component: () => import('@/views/HomeView.vue'),
+        },
+        {
+          path:'bloggers',
+          name:'bloggers',
+          component: () => import('@/views/BloggerView.vue'),
         }
       ]
     },

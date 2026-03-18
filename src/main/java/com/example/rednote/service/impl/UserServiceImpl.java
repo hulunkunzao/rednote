@@ -34,7 +34,9 @@ import cn.hutool.crypto.digest.BCrypt;
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -188,5 +190,35 @@ public class UserServiceImpl implements UserService {
                 .eq(FollowPO::getFollowingId, followUserId);
         FollowPO exist = followMapper.selectOne(wrapper);
         return exist != null;
+    }
+
+    @Override
+    public List<UserVO> listBloggers() {
+        String userIdStr = ThreadLocalUtils.get("userId");
+        Integer currentUserId = Integer.parseInt(userIdStr);
+
+        LambdaQueryWrapper<FollowPO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(FollowPO::getFollowerId, currentUserId);
+        List<FollowPO> followPOList = followMapper.selectList(wrapper);
+
+        List<UserVO> userVOList= followPOList.stream()
+                .map(followPO -> userMapper.selectById(followPO.getFollowingId()))
+                .map(userPO -> {
+                    UserVO userVO = new UserVO();
+                    BeanUtil.copyProperties(userPO, userVO);
+                    return userVO;
+                })
+                .collect(Collectors.toList());
+        return userVOList;
+    }
+
+    @Override
+    public UserVO getCurrentUser() {
+        String userIdStr = ThreadLocalUtils.get("userId");
+        Integer currentUserId = Integer.parseInt(userIdStr);
+        UserPO userPO = userMapper.selectById(currentUserId);
+        UserVO userVO = new UserVO();
+        BeanUtil.copyProperties(userPO, userVO);
+        return userVO;
     }
 }

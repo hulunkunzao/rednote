@@ -40,6 +40,13 @@ public class PostController {
         List<PostResult> postResults = postService.listWithUserInfo(topicId);
         return Result.success(postResults);
     }
+    @GetMapping("/list/{bloggerId}")
+    @Operation(summary = "获取博主帖子", description = "适用于主页的返回所有贴子,带用户头像、用户名")
+    public Result<List<PostResult>> listWithUserInfoByBloggerId(
+            @PathVariable Integer bloggerId) {
+        List<PostResult> postResults = postService.listWithUserInfoByBloggerId(bloggerId);
+        return Result.success(postResults);
+    }
 
     @GetMapping("/{postId}")
     @Operation(summary = "获取帖子详情", description = "根据帖子ID返回详细信息")

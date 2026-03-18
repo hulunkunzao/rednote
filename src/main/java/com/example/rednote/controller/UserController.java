@@ -19,6 +19,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @AllArgsConstructor
@@ -88,5 +90,17 @@ public class UserController {
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
         return Result.success(userService.listUserPosts(userId, page, size));
+    }
+
+    @GetMapping("/followers")
+    @Operation(summary = "查询关注的人")
+    public Result<List<UserVO>> listFollowers() {
+        return Result.success(userService.listBloggers());
+    }
+
+    @GetMapping("/current/me")
+    @Operation(summary = "获取当前登录用户",description = "返回当前登录用户的简略信息")
+    public Result<UserVO> getCurrentUserInfo() {
+        return Result.success(userService.getCurrentUser());
     }
 }

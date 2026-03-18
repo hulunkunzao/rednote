@@ -1,15 +1,11 @@
 <template>
 
   <div class="post-grid">
-    <el-tabs @tab-click="handleTabClick">
-        <el-tab-pane label="推荐" name="0"></el-tab-pane>
-        <el-tab-pane v-for="topic in topicList" 
-          :key="topic.topicId" :name="topic.topicId.toString()">
-          <template #label>
-            <el-tooltip :content="topic.topicDescription" placement="top">
-              <span>{{ topic.topicName }}</span>
-            </el-tooltip>
-          </template>
+    <el-tabs v-model="activeName" @tab-click="handleTabClick">
+        <el-tab-pane v-for="blogger in bloggerList" 
+          :key="blogger.userId" 
+          :name="blogger.userId.toString()" 
+          :label="blogger.username">
         </el-tab-pane>
     </el-tabs>
 
@@ -53,20 +49,7 @@
       <div class="modal-content-wrap">
         <div class="left-card">
           <div class="image-container" v-if="imageUrlList.length > 0">
-            <!-- 视频播放 -->
-            <video 
-                v-if="isVideo(imageUrlList[currentImageIndex])"
-                :src="imageUrlList[currentImageIndex]"
-                :alt="`Video ${currentImageIndex + 1}`"
-                class="post-image"
-                controls
-                autoplay
-                muted
-                loop
-            ></video>
-            <!-- 图片显示 -->
             <img 
-                v-else
                 :src="imageUrlList[currentImageIndex]" 
                 :alt="`Image ${currentImageIndex + 1}`"
                 class="post-image"
@@ -155,11 +138,11 @@
 </template>
 
 <script>
-import { getPostListApi,getPostDetailApi,getTopicListApi,getPostImagesApi } from '@/api/post'
+import { getPostListApi,getPostDetailApi,getBloggerPostsApi,getPostImagesApi } from '@/api/post'
 import { getCommentListApi,addCommentApi } from '@/api/comment'
 import { isLikedApi,likedApi } from '@/api/like'
 import { ElMessage } from 'element-plus' 
-import { followUserApi,isFollowedApi } from '@/api/user'
+import { followUserApi,isFollowedApi,getBloggersApi } from '@/api/user'
 import '@/assets/baseHome.css'
 export default {
     data() {
@@ -168,8 +151,9 @@ export default {
           post: {},
           postDetail: {},
           detailVisible: false,
-          topicList: [],
-          topicId: 0,
+          bloggerList: [],
+            bloggerId: 0,
+            activeName: '',
           imageUrlList: [],
           currentImageIndex: 0,
           commentList: [],
@@ -191,9 +175,7 @@ export default {
         async fetchPosts() {
           this.loading = true
           try {
-              const response = await getPostListApi({
-                topicId: this.topicId,
-              })
+              const response = await getBloggerPostsApi(this.bloggerId)
               this.postList = response.data
           } catch (error) {
               console.error('获取帖子列表失败:', error)
@@ -211,6 +193,7 @@ export default {
               ElMessage.success('关注成功')
             } else {
               ElMessage.success('已经取消关注')
+              this.fetchBloggers()
             }
           } catch (error) {
             ElMessage.error('操作失败，请稍后重试')
@@ -238,12 +221,18 @@ export default {
               console.error('获取帖子图片失败:', error)
           }
         },
-        async fetchTopics() {
+        async fetchBloggers() {
           try {
-              const response = await getTopicListApi()
-              this.topicList = response.data
+              const response = await getBloggersApi()
+              this.bloggerList = response.data
+              // 设置默认选中第一个博主
+              if (this.bloggerList.length > 0) {
+                this.activeName = this.bloggerList[0].userId.toString()
+                this.bloggerId = this.bloggerList[0].userId
+                this.fetchPosts()
+              }
           } catch (error) {
-              console.error('获取话题列表失败:', error)
+              console.error('获取关注用户列表失败:', error)
           }
         },
         async fetchCommentList(postId){
@@ -286,8 +275,9 @@ export default {
           }
         },
         handleTabClick(tab) {
-          const topicId = parseInt(tab.paneName) 
-          this.topicId = topicId
+          const bloggerId = parseInt(tab.paneName) 
+          this.bloggerId = bloggerId
+          this.activeName = tab.paneName
           this.fetchPosts()
         },
         async isFollowed(bloggerId){
@@ -326,15 +316,10 @@ export default {
           if (this.currentImageIndex < this.imageUrlList.length - 1) {
             this.currentImageIndex++
           }
-        },
-        isVideo(url) {
-          const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi']
-          return videoExtensions.some(ext => url.toLowerCase().endsWith(ext))
         }
     },
     mounted() {
-        this.fetchPosts()
-        this.fetchTopics()
+        this.fetchBloggers()
     }
 }
 </script>

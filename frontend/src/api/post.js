@@ -7,3 +7,5 @@ export const getPostDetailApi = (postId) => request.get(`/postsDetails/${postId}
 export const getTopicListApi = () => request.get('/topics/list')
 
 export const getPostImagesApi = (postId) => request.get(`/post-images/${postId}`)
+
+export const getBloggerPostsApi = (bloggerId) => request.get(`/posts/list/${bloggerId}`)

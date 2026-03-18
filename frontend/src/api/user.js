@@ -8,3 +8,7 @@ export const getUserInfoApi = (userId) => request.get(`/users/${userId}`)
 export const followUserApi = (followUserId) => request.post(`/users/follow/${followUserId}`)
 
 export const isFollowedApi = (followUserId) => request.get(`/users/follow/${followUserId}`)
+
+export const getBloggersApi = () => request.get(`/users/followers`)
+
+export const getCurrentUserInfo = () => request.get(`/users/current/me`)

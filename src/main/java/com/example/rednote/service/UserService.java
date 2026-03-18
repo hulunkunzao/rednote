@@ -9,6 +9,8 @@ import com.example.rednote.model.vo.PostVO;
 import com.example.rednote.model.vo.UserDetailsVO;
 import com.example.rednote.model.vo.UserVO;
 
+import java.util.List;
+
 public interface UserService {
 
     UserVO getById(Integer userId);
@@ -30,4 +32,8 @@ public interface UserService {
     Page<PostVO> listUserPosts(Integer userId, Integer page, Integer size);
 
     Boolean isFollow(Integer followUserId);
+
+    List<UserVO> listBloggers();
+
+    UserVO getCurrentUser();
 }
