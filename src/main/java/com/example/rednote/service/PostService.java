@@ -13,4 +13,6 @@ public interface PostService extends IService<PostPO> {
     List<PostResult> listWithUserInfoByBloggerId(Integer bloggerId);
 
     void addPost(PostDTO postDTO);
+
+    void delete(Integer postId);
 }

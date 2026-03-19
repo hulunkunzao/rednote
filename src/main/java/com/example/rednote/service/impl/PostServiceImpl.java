@@ -88,4 +88,12 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostPO> implements 
             postTopicMapper.insert(postTopicPO);
         }
     }
+
+    @Override
+    public void delete(Integer postId) {
+        postMapper.deleteById(postId);
+        postTopicMapper.delete(new LambdaQueryWrapper<PostTopicPO>().eq(PostTopicPO::getPostId, postId));
+        postDetailsMapper.delete(new LambdaQueryWrapper<PostDetailsPO>().eq(PostDetailsPO::getPostId, postId));
+        postImageMapper.delete(new LambdaQueryWrapper<PostImagePO>().eq(PostImagePO::getPostId, postId));
+    }
 }
