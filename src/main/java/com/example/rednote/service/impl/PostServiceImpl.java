@@ -46,4 +46,21 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostPO> implements 
         }).toList();
         return postResults;
     }
+
+    @Override
+    public List<PostResult> listWithUserInfoByBloggerId(Integer bloggerId) {
+        LambdaQueryWrapper<PostPO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(PostPO::getUserId, bloggerId);
+        List<PostPO> postPOS = postMapper.selectList(wrapper);
+        List<PostResult> postResults = postPOS.stream().map(postPO -> {
+            UserPO userPO = userMapper.selectById(postPO.getUserId());
+            PostResult postResult = new PostResult();
+            //postPO.setCoverImage(minioUtils.getPublicUrl(postPO.getCoverImage()));
+            BeanUtils.copyProperties(postPO, postResult);
+            postResult.setUserName(userPO.getUsername());
+            postResult.setUserAvatar(userPO.getAvatar());
+            return postResult;
+        }).toList();
+        return postResults;
+    }
 }

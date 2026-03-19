@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface PostService extends IService<PostPO> {
     List<PostResult> listWithUserInfo(int topicId);
+
+    List<PostResult> listWithUserInfoByBloggerId(Integer bloggerId);
 }
