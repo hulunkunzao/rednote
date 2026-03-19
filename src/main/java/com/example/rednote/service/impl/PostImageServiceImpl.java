@@ -14,4 +14,13 @@ import java.util.List;
 public class PostImageServiceImpl implements PostImageService {
 
 
+    private final PostImageMapper postImageMapper;
+    @Override
+    public List<String> list(Integer postId) {
+        List<PostImagePO> postImagePOS = postImageMapper.selectList
+                (new LambdaQueryWrapper<PostImagePO>().eq(PostImagePO::getPostId, postId));
+        return postImagePOS.stream()
+                .map(PostImagePO::getUrl)
+                .toList();
+    }
 }
