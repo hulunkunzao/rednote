@@ -1,12 +1,8 @@
 package com.example.rednote.controller;
 
+import com.example.rednote.model.dto.PostDTO;
 import com.example.rednote.model.vo.PostResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.rednote.common.response.Result;
@@ -60,5 +56,12 @@ public class PostController {
             @PathVariable Integer bloggerId) {
         List<PostResult> postResults = postService.listWithUserInfoByBloggerId(bloggerId);
         return Result.success(postResults);
+    }
+
+    @Operation(summary = "添加帖子")
+    @PostMapping("/insert")
+    public Result addPost(@RequestBody PostDTO postDTO){
+        postService.addPost(postDTO);
+        return Result.success();
     }
 }
