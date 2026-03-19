@@ -46,7 +46,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostPO> implements 
         }).toList();
         return postResults;
     }
-
+    @Transactional
     @Override
     public List<PostResult> listWithUserInfoByBloggerId(Integer bloggerId) {
         LambdaQueryWrapper<PostPO> wrapper = new LambdaQueryWrapper<>();
@@ -63,7 +63,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostPO> implements 
         }).toList();
         return postResults;
     }
-
+    @Transactional
     @Override
     public void addPost(PostDTO postDTO){
         PostPO postPO = new PostPO();
@@ -88,7 +88,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostPO> implements 
             postTopicMapper.insert(postTopicPO);
         }
     }
-
+    @Transactional
     @Override
     public void delete(Integer postId) {
         postMapper.deleteById(postId);
