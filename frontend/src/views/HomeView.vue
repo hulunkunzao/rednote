@@ -103,7 +103,10 @@
             <div class="user-header">
               <img class="avatar" :src="bloggerInfo.bloggerAvatar" alt="头像" />
               <span class="username">{{ bloggerInfo.bloggerName }}</span>
-              <button class="follow-btn" @click="handleFollow">{{ followed ? '取消关注' : '关注' }}</button>
+              <button 
+                v-if="userInfo.userId !== bloggerInfo.bloggerId"
+                class="follow-btn" 
+                @click="handleFollow">{{ followed ? '取消关注' : '关注' }}</button>
             </div>
 
             <!-- 正文内容 -->
@@ -159,7 +162,7 @@ import { getPostListApi,getPostDetailApi,getTopicListApi,getPostImagesApi } from
 import { getCommentListApi,addCommentApi } from '@/api/comment'
 import { isLikedApi,likedApi } from '@/api/like'
 import { ElMessage } from 'element-plus' 
-import { followUserApi,isFollowedApi } from '@/api/user'
+import { followUserApi,isFollowedApi,getCurrentUserInfo } from '@/api/user'
 import '@/assets/baseHome.css'
 export default {
     data() {
@@ -185,6 +188,7 @@ export default {
             bloggerAvatar: '',
           },
           followed: false,
+          userInfo: {},
         }
     },  
     methods: {
@@ -197,6 +201,14 @@ export default {
               this.postList = response.data
           } catch (error) {
               console.error('获取帖子列表失败:', error)
+          }
+        },
+        async fetchUserInfo(){
+          try {
+            const response = await getCurrentUserInfo()
+            this.userInfo = response.data
+          } catch (error) {
+            console.error('获取用户信息失败:', error)
           }
         },
         async handleFollow(){
@@ -335,6 +347,7 @@ export default {
     mounted() {
         this.fetchPosts()
         this.fetchTopics()
+        this.fetchUserInfo()
     }
 }
 </script>

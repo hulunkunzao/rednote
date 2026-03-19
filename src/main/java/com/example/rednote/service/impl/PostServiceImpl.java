@@ -36,6 +36,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostPO> implements 
     @Transactional
     public List<PostResult> listWithUserInfo(int topicId) {
         LambdaQueryWrapper<PostPO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.orderByDesc(PostPO::getCreateTime);
         if(topicId != 0){
             List<PostTopicPO> postTopicPOS = postTopicMapper
                     .selectList(new LambdaQueryWrapper<PostTopicPO>().eq(PostTopicPO::getTopicId, topicId));
@@ -57,6 +58,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostPO> implements 
     @Override
     public List<PostResult> listWithUserInfoByBloggerId(Integer bloggerId) {
         LambdaQueryWrapper<PostPO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.orderByDesc(PostPO::getCreateTime);
         wrapper.eq(PostPO::getUserId, bloggerId);
         List<PostPO> postPOS = postMapper.selectList(wrapper);
         List<PostResult> postResults = postPOS.stream().map(postPO -> {

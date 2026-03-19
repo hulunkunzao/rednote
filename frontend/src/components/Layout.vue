@@ -18,7 +18,7 @@
                 :alt="userInfo.username" 
                 class="user-avatar"
               >
-              <span>(粉丝共：{{ userDetail.fansCount }}人)</span>
+              <span>(粉丝共{{ userDetail.fansCount }}人)</span>
             </div>
           </div>
         </el-header>
