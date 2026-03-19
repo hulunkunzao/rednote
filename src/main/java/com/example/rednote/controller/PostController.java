@@ -1,5 +1,6 @@
 package com.example.rednote.controller;
 
+import com.example.rednote.model.vo.PostResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,8 @@ import com.example.rednote.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
@@ -41,5 +44,13 @@ public class PostController {
     public Result<?> delete(@PathVariable Integer postId) {
         postService.removeById(postId);
         return Result.success();
+    }
+
+    @GetMapping("/list")
+    @Operation(summary = "获取全部帖子", description = "适用于主页的返回所有贴子,带用户头像、用户名")
+    public Result<List<PostResult>> listWithUserInfo(
+            @RequestParam(defaultValue = "0") int topicId) {
+        List<PostResult> postResults = postService.listWithUserInfo(topicId);
+        return Result.success(postResults);
     }
 }
