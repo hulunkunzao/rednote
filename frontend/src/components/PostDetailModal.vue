@@ -109,7 +109,8 @@
 
 <script>
 import { ElMessage } from 'element-plus'
-import { getPostDetailApi, getPostImagesApi } from '@/api/post'
+import { getPostDetailApi} from '@/api/post'
+import { getPostImagesApi } from '@/api/image'
 import { getCommentListApi, addCommentApi } from '@/api/comment'
 import { isLikedApi, likedApi } from '@/api/like'
 import { followUserApi, isFollowedApi } from '@/api/user'
@@ -173,53 +174,18 @@ export default {
       this.bloggerInfo.bloggerAvatar = this.post.userAvatar
       this.currentImageIndex = 0
       
-      await Promise.all([
-        this.getPostDetail(this.post.postId),
-        this.fetchPostImages(this.post.postId),
-        this.fetchCommentList(this.post.postId),
-        this.isFollowed(this.post.userId),
-        this.isLike(this.post.postId)
+      const [detailsRes, imagesRes, commentRes, followRes, likeRes] = await Promise.all([
+        getPostDetailApi(this.post.postId),
+        getPostImagesApi(this.post.postId),
+        getCommentListApi(this.post.postId),
+        isFollowedApi(this.post.userId),
+        isLikedApi(this.post.postId)
       ])
-    },
-    async getPostDetail(postId){
-      try {
-        const response = await getPostDetailApi(postId)
-        this.postDetail = response.data
-      } catch (error) {
-        console.error('获取帖子详情失败:', error)
-      }
-    },
-    async fetchPostImages(postId) {
-      try {
-        const response = await getPostImagesApi(postId)
-        this.imageUrlList = response.data
-      } catch (error) {
-        console.error('获取帖子图片失败:', error)
-      }
-    },
-    async fetchCommentList(postId){
-      try {
-        const response = await getCommentListApi(postId)
-        this.commentList = response.data
-      } catch (error) {
-        console.error('获取评论列表失败:', error)
-      }
-    },
-    async isLike(postId){
-      try {
-        const response = await isLikedApi(postId)
-        this.isLiked = response.data
-      } catch (error) {
-        ElMessage.error('操作失败，请稍后重试')
-      }
-    },
-    async isFollowed(bloggerId){
-      try {
-        const response = await isFollowedApi(bloggerId)
-        this.followed = response.data
-      } catch (error) {
-        ElMessage.error('操作失败，请稍后重试')
-      }
+      this.postDetail = detailsRes.data
+      this.imageUrlList = imagesRes.data
+      this.commentList = commentRes.data
+      this.followed = followRes.data
+      this.isLiked = likeRes.data
     },
     async handleFollow(){
       try {
@@ -252,8 +218,10 @@ export default {
         await addCommentApi(this.commentInfo)
         ElMessage.success('评论成功')
         this.commentInfo.content = ''
-        this.fetchCommentList(this.currentPostId)
+        const response = await getCommentListApi(this.currentPostId)
+        this.commentList = response.data
       } catch (error) {
+        console.error('评论失败:', error)
         ElMessage.error('评论失败')
       }
     },

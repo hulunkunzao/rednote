@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/post-images")
+@RequestMapping("/images")
 @Tag(name = "帖子图片接口", description = "帖子图片相关接口")
 @AllArgsConstructor
 public class PostImageController {

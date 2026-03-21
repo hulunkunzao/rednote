@@ -30,6 +30,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostPO> implements 
     private final MinioUtils minioUtils;
     private final PostDetailsMapper postDetailsMapper;
     private final PostImageMapper postImageMapper;
+    private final LikeMapper likeMapper;
 
 
     @Override
@@ -96,5 +97,33 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostPO> implements 
             postTopicPO.setTopicId(Integer.parseInt(topicId));
             postTopicMapper.insert(postTopicPO);
         }
+    }
+
+    @Override
+    public void deleteById(Integer postId) {
+        // 1. 获取当前用户id，获取帖子
+        Integer currId = Integer.parseInt(ThreadLocalUtils.get("userId"));
+        PostPO postPO = postMapper.selectById(postId);
+        PostDetailsPO postDetailsPO = postDetailsMapper.selectById(postId);
+        // 3.删除帖子点赞表中的点赞
+
+        // 4.删除帖子评论表中的评论
+
+        // 5.删除帖子表中的帖子
+
+        // 6.删除帖子详情表中的帖子详情
+
+        // 7.删除帖子图片表中的记录
+
+        // 8.删除帖子话题表中的记录
+
+        // 9.更新话题表中的帖子数
+
+        // 9.更新帖子表中的帖子数 post_count
+
+        // 10.更新用户表中的帖子数 post_count
+
+        // 11.更新用户表中的点赞数 like_count
+
     }
 }

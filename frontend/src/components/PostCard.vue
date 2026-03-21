@@ -8,7 +8,7 @@
         <h3 class="post-title">{{ post.title }}</h3>
         <p class="post-description">{{ post.content }}</p>
         <div class="post-user">
-          <img :src="post.userAvatar" :alt="post.createTime" class="avatar">
+          <img :src="post.userAvatar" :alt="post.userName" class="avatar">
           <span>{{ post.userName }}</span>
           <span class="time">{{ post.createTime }}</span>
         </div>
