@@ -67,13 +67,13 @@ export default {
         const valid = await this.$refs.formRef.validate()
         if (valid) {
           const res = await loginApi(this.form)
-          ElMessage.success('登录成功')
           localStorage.setItem('token', res.data)
-          useUserStore().initUser()
+          useUserStore().init()
           this.$router.push('/')
+          ElMessage.success('登录成功')
         }
       } catch (e) {
-        ElMessage.error(e.response?.data?.msg || '登录失败，请稍后重试')
+        console.log(`登录失败：${e}`)
       }
     },
   },

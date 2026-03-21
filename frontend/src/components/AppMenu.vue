@@ -1,5 +1,5 @@
 <template>
-  <el-menu default-active="$route.path" router class="el-menu-vertical-demo menu-container">
+  <el-menu :default-active="$route.path" router class="el-menu-vertical-demo menu-container">
     <div class="menu-top">
       <el-menu-item index="/explore">
         <el-icon><HomeFilled /></el-icon>
@@ -13,31 +13,30 @@
         <el-icon><Message /></el-icon>
         <span>通知</span>
       </el-menu-item>
-      <el-menu-item index="/profile">
+      <el-menu-item :index="'/profiles/' + userId">
         <el-icon><User /></el-icon>
         <span>我</span>
       </el-menu-item>
     </div>
     <div class="menu-bottom">
-      <el-menu-item>
-        <el-dropdown trigger="click" placement="top-start">
-          <span
-            ><el-icon><Setting /></el-icon> 设置
-          </span>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item>The Action 1st</el-dropdown-item>
-              <el-dropdown-item>The Action 2nd</el-dropdown-item>
-              <el-dropdown-item>The Action 3rd</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
+      <el-menu-item index="/settings">
+        <el-icon><Setting /></el-icon>
+        <span>设置</span>
       </el-menu-item>
     </div>
   </el-menu>
 </template>
 
-<script setup></script>
+<script>
+import { mapState } from 'pinia'
+import { useUserStore } from '@/stores/user'
+
+export default {
+  computed: {
+    ...mapState(useUserStore, ['userId']),
+  },
+}
+</script>
 
 <style scoped>
 .menu-container {

@@ -3,13 +3,14 @@ package com.example.rednote.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.rednote.common.response.Result;
-import com.example.rednote.model.dto.LoginDTO;
-import com.example.rednote.model.dto.UserDTO;
+import com.example.rednote.model.dto.UserAuthDTO;
+import com.example.rednote.model.dto.UserUpdateDTO;
 import com.example.rednote.model.vo.UserVO;
 import com.example.rednote.service.UserService;
 
@@ -35,18 +36,15 @@ public class UserController {
 
     @PostMapping("/register")
     @Operation(summary = "用户注册", description = "创建新用户账户")
-    public Result<?> register(@RequestBody UserDTO userDto) {
-        if (userService.register(userDto) == 1) {
-            return Result.success();
-        } else {
-            return Result.fail("注册失败");
-        }
+    public Result<?> register(@RequestBody UserAuthDTO userAuthDTO) {
+        userService.register(userAuthDTO);
+        return Result.success();
     }
 
     @PostMapping("/login")
     @Operation(summary = "用户登录", description = "登录用户账号")
-    public Result<String> login(@RequestBody LoginDTO loginDTO) {
-        return Result.success(userService.login(loginDTO));
+    public Result<String> login(@RequestBody UserAuthDTO userAuthDTO) {
+        return Result.success(userService.login(userAuthDTO));
     }
 
     @GetMapping("/current")
@@ -54,4 +52,12 @@ public class UserController {
     public Result<UserVO> getCurrentUser() {
         return Result.success(userService.getCurrentUser());
     }
+
+    @PutMapping("/profile")
+    @Operation(summary = "修改当前用户资料", description = "修改当前用户的信息，支持基本和详细信息")
+    public Result<?> updateUser(@RequestBody UserUpdateDTO userUpdateDTO) {
+        userService.updateUser(userUpdateDTO);
+        return Result.success();
+    }
+
 }

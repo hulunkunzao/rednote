@@ -61,8 +61,8 @@
 import { ElMessage } from 'element-plus'
 import { getByIdApi, getDetailByIdApi } from '@/api/user'
 import { toggleFollowApi, isFollowApi } from '@/api/follow'
+import { mapState } from 'pinia'
 import { useUserStore } from '@/stores/user'
-import { storeToRefs } from 'pinia'
 
 export default {
   name: 'UserCard',
@@ -72,10 +72,10 @@ export default {
       required: true,
     },
   },
-  setup() {
-    const userStore = useUserStore()
-    const { userId: currUserId } = storeToRefs(userStore)
-    return { currUserId }
+  computed: {
+    ...mapState(useUserStore, {
+      currUserId: 'userId',
+    }),
   },
   data() {
     return {
@@ -106,7 +106,11 @@ export default {
   methods: {
     async fetchUser(id) {
       try {
-        const [userRes, detailsRes] = await Promise.all([getByIdApi(id), getDetailByIdApi(id)])
+        const [userRes, detailsRes, followRes] = await Promise.all([
+          getByIdApi(id),
+          getDetailByIdApi(id),
+          isFollowApi(id),
+        ])
 
         this.user = {
           userId: userRes.data.userId,
@@ -119,10 +123,9 @@ export default {
           likeReceiveCount: detailsRes.data.likeReceiveCount,
         }
 
-        const res = await isFollowApi(id)
-        this.isFollowed = res.data
-      } catch (err) {
-        ElMessage.error(err.message || '获取用户信息失败')
+        this.isFollowed = followRes.data
+      } catch (e) {
+        console.log(`尝试获取用户信息失败：${e}`)
       }
     },
     async handleToggleFollow() {
@@ -131,8 +134,8 @@ export default {
         await toggleFollowApi(this.userId)
         this.isFollowed = !this.isFollowed
         this.fetchUser(this.userId)
-      } catch (err) {
-        ElMessage.error(err.message || '操作失败')
+      } catch (e) {
+        console.log(`关注后用户数据更新失败：${e}`)
       } finally {
         this.followLoading = false
       }

@@ -1,16 +1,18 @@
 package com.example.rednote.service;
 
-import com.example.rednote.model.dto.LoginDTO;
-import com.example.rednote.model.dto.UserDTO;
+import com.example.rednote.model.dto.UserAuthDTO;
+import com.example.rednote.model.dto.UserUpdateDTO;
 import com.example.rednote.model.vo.UserVO;
 
 public interface UserService {
 
     UserVO getById(Integer userId);
 
-    Integer register(UserDTO userDTO);
+    void register(UserAuthDTO userAuthDTO);
 
-    String login(LoginDTO loginDTO);
+    String login(UserAuthDTO userAuthDTO);
 
     UserVO getCurrentUser();
+
+    void updateUser(UserUpdateDTO userUpdateDTO);
 }
